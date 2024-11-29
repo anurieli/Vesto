@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Beneficiary Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h1>Beneficiary Dashboard</h1>
+
+  <div id="vesting-info">
+    <p><strong>Total Amount:</strong> <span id="total-amount">Loading...</span></p>
+    <p><strong>Amount Vested:</strong> <span id="amount-vested">Loading...</span></p>
+    <p><strong>Percentage Vested:</strong> <span id="percentage-vested">Loading...</span></p>
+    <p><strong>Amount Available to Withdraw:</strong> <span id="available-to-withdraw">Loading...</span></p>
+  </div>
+
+  <button id="release-button">Release Tokens</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/beneficiary.js"></script>
+</body>
+</html>

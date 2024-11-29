@@ -1,0 +1,52 @@
+<!-- src/public/owner.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Owner's Dashboard</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <h1>Owner's Dashboard</h1>
+
+  <div id="vesting-info" style="display: none;">
+    <!-- Display vesting information when active -->
+    <p><strong>Total Amount:</strong> <span id="total-amount">Loading...</span></p>
+    <p><strong>Amount Vested:</strong> <span id="amount-vested">Loading...</span></p>
+    <p><strong>Time Left:</strong> <span id="time-left">Loading...</span></p>
+
+    <button id="revoke-button">Revoke Contract</button>
+  </div>
+
+  <div id="create-vesting-form" style="display: none;">
+    <!-- Display form to create a new vesting contract when no active vesting -->
+    <h2>Create New Vesting Contract</h2>
+    <form id="vesting-form">
+      <label for="beneficiary-address">Beneficiary Address:</label><br>
+      <input type="text" id="beneficiary-address" name="beneficiary-address" required><br><br>
+
+      <label for="amount">Amount (Tokens):</label><br>
+      <input type="number" step="any" id="amount" name="amount" required><br><br>
+
+      <label>Duration:</label><br>
+      <input type="number" id="years" name="years" min="0" placeholder="Years">
+      <input type="number" id="months" name="months" min="0" placeholder="Months">
+      <input type="number" id="days" name="days" min="0" placeholder="Days">
+      <input type="number" id="hours" name="hours" min="0" placeholder="Hours">
+      <input type="number" id="minutes" name="minutes" min="0" placeholder="Minutes"><br><br>
+
+      <label for="revocable">Is Revocable:</label><br>
+      <select id="revocable" name="revocable">
+        <option value="true">Yes</option>
+        <option value="false">No</option>
+      </select><br><br>
+
+      <button type="submit">Create Vesting Contract</button>
+    </form>
+  </div>
+
+<script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/owner.js"></script>
+</body>
+</html>
