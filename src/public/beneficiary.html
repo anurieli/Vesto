@@ -5,8 +5,11 @@
   <title>Beneficiary Dashboard</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
-  <h1>Beneficiary Dashboard</h1>
+<body class="gradient-bg">
+  <header>
+    <h1>Beneficiary Dashboard</h1>
+    <a href="index.html" class="home-button">Home</a>
+  </header>
 
   <div id="vesting-info">
     <p><strong>Total Amount:</strong> <span id="total-amount">Loading...</span></p>
@@ -17,8 +20,11 @@
 
   <button id="release-button">Release Tokens</button>
 
+  <!-- Include ethers.js (version compatible with browsers) -->
   <script src="https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js"></script>
+  <!-- Include app.js -->
   <script src="js/app.js"></script>
+  <!-- Include beneficiary.js -->
   <script src="js/beneficiary.js"></script>
 </body>
 </html>

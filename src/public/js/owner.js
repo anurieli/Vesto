@@ -2,48 +2,65 @@
 
 async function loadOwnerDashboard() {
   // Ensure contract is initialized
-  if (typeof contract === 'undefined') {
+  if (typeof window.contract === 'undefined') {
     setTimeout(loadOwnerDashboard, 500); // Retry after delay
     return;
   }
 
-  // Check if there is an active vesting
-  const active = await contract.vestingActive();
+  try {
+    // Get the connected wallet address
+    const ownerAddress = await window.signer.getAddress();
+    document.getElementById('wallet-address').innerText = ownerAddress;
 
-  if (active) {
-    // Show vesting info, hide create vesting form
-    document.getElementById('vesting-info').style.display = 'block';
-    document.getElementById('create-vesting-form').style.display = 'none';
-
-    // Fetch contract data
-    const totalAmount = await contract.getTotalAmount(); // BigInt
-    const released = await contract.getReleased(); // BigInt
-    const start = await contract.getStart(); // BigInt
-    const duration = await contract.getDuration(); // BigInt
-
-    // Calculate amount vested
-    const currentTime = BigInt(Math.floor(Date.now() / 1000));
-    let amountVested;
-    if (currentTime >= start + duration) {
-      amountVested = totalAmount;
-    } else if (currentTime < start) {
-      amountVested = 0n;
-    } else {
-      amountVested = (totalAmount * (currentTime - start)) / duration;
+    // Check if the connected account is the owner of the contract
+    const contractOwner = await window.contract.owner();
+    if (ownerAddress.toLowerCase() !== contractOwner.toLowerCase()) {
+      alert('You are not the owner of this contract.');
+      return;
     }
 
-    // Calculate time left
-    const timeLeft = currentTime < start + duration ? (start + duration) - currentTime : 0n;
+    // Check if there is an active vesting
+    const active = await window.contract.vestingActive();
 
-    // Update UI
-    document.getElementById('total-amount').innerText = ethers.formatEther(totalAmount) + ' Tokens';
-    document.getElementById('amount-vested').innerText = ethers.formatEther(amountVested) + ' Tokens';
-    document.getElementById('time-left').innerText = formatDuration(Number(timeLeft));
+    if (active) {
+      // Show vesting info, hide create vesting form
+      document.getElementById('vesting-info').style.display = 'block';
+      document.getElementById('create-vesting-form').style.display = 'none';
 
-  } else {
-    // Hide vesting info, show create vesting form
-    document.getElementById('vesting-info').style.display = 'none';
-    document.getElementById('create-vesting-form').style.display = 'block';
+      // Fetch contract data
+      const totalAmount = await window.contract.getTotalAmount(); // BigNumber
+      const released = await window.contract.getReleased(); // BigNumber
+      const start = await window.contract.getStart(); // BigNumber
+      const duration = await window.contract.getDuration(); // BigNumber
+
+      // Calculate amount vested
+      const currentTime = ethers.BigNumber.from(Math.floor(Date.now() / 1000));
+      let amountVested;
+      if (currentTime.gte(start.add(duration))) {
+        amountVested = totalAmount;
+      } else if (currentTime.lt(start)) {
+        amountVested = ethers.BigNumber.from('0');
+      } else {
+        amountVested = totalAmount.mul(currentTime.sub(start)).div(duration);
+      }
+
+      // Calculate time left
+      const endTime = start.add(duration);
+      const timeLeft = endTime.gt(currentTime) ? endTime.sub(currentTime) : ethers.BigNumber.from('0');
+
+      // Update UI
+      document.getElementById('total-amount').innerText = ethers.utils.formatEther(totalAmount) + ' Tokens';
+      document.getElementById('amount-vested').innerText = ethers.utils.formatEther(amountVested) + ' Tokens';
+      document.getElementById('time-left').innerText = formatDuration(timeLeft.toNumber());
+
+    } else {
+      // Hide vesting info, show create vesting form
+      document.getElementById('vesting-info').style.display = 'none';
+      document.getElementById('create-vesting-form').style.display = 'block';
+    }
+  } catch (error) {
+    console.error('Error loading owner dashboard:', error);
+    alert('Error loading owner dashboard. Please check the console for details.');
   }
 }
 
@@ -54,18 +71,21 @@ function formatDuration(seconds) {
   return `${days}d ${hrs}h ${mins}m`;
 }
 
+// Update slider value
+function updateSliderValue(id, value) {
+  document.getElementById(`${id}-output`).innerText = `Selected: ${value}`;
+}
+
+
 document.getElementById('revoke-button').addEventListener('click', async () => {
-  const confirmRevocation = confirm('Are you sure you want to revoke the vesting contract?');
-  if (confirmRevocation) {
-    try {
-      const tx = await contract.revoke();
-      await tx.wait();
-      alert('Contract revoked successfully!');
-      loadOwnerDashboard();
-    } catch (error) {
-      console.error(error);
-      alert('Error revoking contract.');
-    }
+  try {
+    const tx = await window.contract.revoke();
+    await tx.wait();
+    alert('Contract revoked successfully!');
+    loadOwnerDashboard();
+  } catch (error) {
+    console.error('Error revoking contract:', error);
+    alert('Error revoking contract. Please check the console for details.');
   }
 });
 
@@ -86,26 +106,25 @@ document.getElementById('vesting-form').addEventListener('submit', async (event)
     return;
   }
 
-  const amount = ethers.parseEther(amountInput);
+  const amount = ethers.utils.parseEther(amountInput);
 
-  // Convert duration to seconds
-  const durationInSeconds =
-    BigInt(years * 31536000) + // 365 days * 24h * 3600s
-    BigInt(months * 2592000) + // 30 days * 24h * 3600s
-    BigInt(days * 86400) +
-    BigInt(hours * 3600) +
-    BigInt(minutes * 60);
+  // Convert duration to seconds using BigNumber
+  const durationInSeconds = ethers.BigNumber.from(years).mul(31536000)
+    .add(ethers.BigNumber.from(months).mul(2592000))
+    .add(ethers.BigNumber.from(days).mul(86400))
+    .add(ethers.BigNumber.from(hours).mul(3600))
+    .add(ethers.BigNumber.from(minutes).mul(60));
 
-  if (durationInSeconds <= 0n) {
+  if (durationInSeconds.lte(ethers.BigNumber.from('0'))) {
     alert('Duration must be greater than zero.');
     return;
   }
 
   const isRevocable = revocableInput === 'true';
-  const startTimestamp = BigInt(Math.floor(Date.now() / 1000)); // Start now
+  const startTimestamp = ethers.BigNumber.from(Math.floor(Date.now() / 1000)); // Start now
 
   try {
-    const tx = await contract.createVesting(
+    const tx = await window.contract.createVesting(
       beneficiaryAddress,
       startTimestamp,
       durationInSeconds,
@@ -116,8 +135,8 @@ document.getElementById('vesting-form').addEventListener('submit', async (event)
     alert('Vesting contract created successfully!');
     loadOwnerDashboard();
   } catch (error) {
-    console.error(error);
-    alert('Error creating vesting contract.');
+    console.error('Error creating vesting contract:', error);
+    alert('Error creating vesting contract. Please check the console for details.');
   }
 });
 

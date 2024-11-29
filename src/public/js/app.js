@@ -3,9 +3,6 @@
 // Fetch the ABI and contract address dynamically
 let abi;
 let contractAddress;
-let provider;
-let signer;
-let contract;
 
 async function init() {
   try {
@@ -28,10 +25,15 @@ async function init() {
         // No accounts connected, request access
         await window.ethereum.request({ method: 'eth_requestAccounts' });
       }
-      provider = new ethers.providers.Web3Provider(window.ethereum);
-      signer = provider.getSigner();
-      contract = new ethers.Contract(contractAddress, abi, signer);
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const contract = new ethers.Contract(contractAddress, abi, signer);
       console.log('Contract initialized:', contract);
+
+      // Make variables globally accessible
+      window.provider = provider;
+      window.signer = signer;
+      window.contract = contract;
     } else {
       alert('Please install MetaMask!');
     }
