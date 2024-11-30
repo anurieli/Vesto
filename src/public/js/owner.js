@@ -8,7 +8,7 @@ async function loadOwnerDashboard() {
   }
 
   try {
-    // Get the connected wallet address
+    // display wallet address on owner dashboard
     const ownerAddress = await window.signer.getAddress();
     document.getElementById('wallet-address').innerText = ownerAddress;
 
