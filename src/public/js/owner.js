@@ -115,8 +115,8 @@ document.getElementById('vesting-form').addEventListener('submit', async (event)
     .add(ethers.BigNumber.from(hours).mul(3600))
     .add(ethers.BigNumber.from(minutes).mul(60));
 
-  if (durationInSeconds.lte(ethers.BigNumber.from('0'))) {
-    alert('Duration must be greater than zero.');
+  if (durationInSeconds.lte(ethers.BigNumber.from('60'))) {
+    alert('Duration must be greater than one minute.');
     return;
   }
 
