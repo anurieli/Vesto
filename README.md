@@ -1,3 +1,5 @@
+GitHub: https://github.com/anurieli/Vesto.git
+
 # Vesting Wallet Project
 
 This project is a decentralized token vesting wallet built on Ethereum, designed to allow owners to create token vesting schedules for beneficiaries. Beneficiaries can release vested tokens at specified intervals, ensuring secure and transparent distribution of tokens.
@@ -137,7 +139,7 @@ project-directory/
 ## Contributing
 
 Feel free to contribute to this project. Fork the repository and submit pull requests with your proposed changes.
-- 
+- https://github.com/anurieli/Vesto.git
 
 ## License
 
