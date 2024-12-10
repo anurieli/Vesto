@@ -4,20 +4,26 @@ This project is a decentralized token vesting wallet built on Ethereum, designed
 
 ## Features
 
+### current version:
 - **Owner Dashboard**: Create and manage vesting contracts.
 - **Beneficiary Dashboard**: View and release tokens from active vesting contracts.
-- **Multi-Beneficiary Support**: Multiple vesting schedules for different beneficiaries.
 - **Customizable Timeframes**: Specify vesting duration in years, months, days, hours, and minutes.
-- **Revocability**: Optionally revoke vesting schedules (if set as revocable).
 - **Dynamic Interaction**: Real-time connection with the Ethereum blockchain via MetaMask.
-- **Matrix Background Effect**: Visual enhancement for a futuristic interface.
+
+
+
+### next version:
+- **Multi-Sig wallet support allowing for unbiased-intermediary between decisions affecting both parties - replacing lawyers and fees.
+- **Multi-Beneficiary Support**: Multiple vesting schedules for different beneficiaries.
+- **Revocability**: Optionally revoke vesting schedules (if set as revocable).
+- **Schedule Functions**: Add, edit, delete vesting schedules - with trusted approval of both parties (*multi-sig)
 
 ## Technologies Used
 
 - **Smart Contract Development**: Solidity
 - **Frontend Development**: HTML, CSS, JavaScript
 - **Ethereum Integration**: Ethers.js
-- **Blockchain Interaction**: MetaMask
+- **Blockchain Interaction**: MetaMask, ether.js
 - **Development Framework**: Hardhat
 
 ## File Structure
@@ -131,6 +137,7 @@ project-directory/
 ## Contributing
 
 Feel free to contribute to this project. Fork the repository and submit pull requests with your proposed changes.
+- 
 
 ## License
 
