@@ -5,9 +5,12 @@
   <title>Vesting Wallet</title>
   <link rel="stylesheet" href="css/styles.css">
 </head>
-<body>
+<body id="index-page">
+  <!-- Canvas for Matrix Effect -->
   <canvas id="matrix-canvas"></canvas>
-  <div class="center-container">
+
+  <!-- Main Content -->
+  <div id="index-content">
     <h1>Welcome to Vesting Wallet</h1>
     <p class="description-bubble">
       This app allows owners to manage token vesting contracts and beneficiaries to track and withdraw their vested tokens securely.
@@ -17,6 +20,8 @@
       <a href="beneficiary.html" class="large-button">Beneficiary's Dashboard</a>
     </div>
   </div>
+
+  <!-- Include matrix.js -->
   <script src="js/matrix.js"></script>
 </body>
 </html>

@@ -94,11 +94,11 @@ document.getElementById('vesting-form').addEventListener('submit', async (event)
 
   const beneficiaryAddress = document.getElementById('beneficiary-address').value;
   const amountInput = document.getElementById('amount').value;
-  const years = parseInt(document.getElementById('years').value) || 0;
-  const months = parseInt(document.getElementById('months').value) || 0;
-  const days = parseInt(document.getElementById('days').value) || 0;
-  const hours = parseInt(document.getElementById('hours').value) || 0;
-  const minutes = parseInt(document.getElementById('minutes').value) || 0;
+  const years = parseInt(document.getElementById('years-input').value) || 0;
+  const months = parseInt(document.getElementById('months-input').value) || 0;
+  const days = parseInt(document.getElementById('days-input').value) || 0;
+  const hours = parseInt(document.getElementById('hours-input').value) || 0;
+  const minutes = parseInt(document.getElementById('minutes-input').value) || 0;
   const revocableInput = document.getElementById('revocable').value;
 
   if (!beneficiaryAddress || !amountInput) {

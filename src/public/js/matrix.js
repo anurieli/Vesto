@@ -1,3 +1,5 @@
+// src/public/js/matrix.js
+
 const canvas = document.getElementById('matrix-canvas');
 const ctx = canvas.getContext('2d');
 
@@ -41,6 +43,7 @@ setInterval(drawMatrix, 50);
 window.addEventListener('resize', () => {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-  drops.length = Math.floor(canvas.width / fontSize);
+  const newColumns = Math.floor(canvas.width / fontSize);
+  drops.length = newColumns;
   drops.fill(1);
 });
